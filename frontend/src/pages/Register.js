@@ -16,7 +16,7 @@ export default function Register() {
     e.preventDefault();
     try {
       await register(email, password);
-      navigate('/dashboard');
+      navigate('/login');
     } catch (err) {
       setError(err.message);
     }

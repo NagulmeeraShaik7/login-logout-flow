@@ -23,10 +23,14 @@ app.use(express.urlencoded({ extended: true }));
  */
 app.use(
   cors({
-    origin: true,           // allow requests from any origin dynamically
-    credentials: true       // allow cookies to be sent
+    origin: [
+      'http://localhost:3000',                      // local dev
+     'https://login-logout-flow-t8k2.vercel.app'  // production frontend
+    ],
+    credentials: true,
   })
 );
+
 
 
 /**
@@ -51,11 +55,12 @@ app.use(
       db: SESSION_DB_FILE.replace(/^\.\/+/, ''),
     }),
     cookie: {
-      maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
+       maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
       httpOnly: true,
-      secure: NODE_ENV === 'production',
-      sameSite: 'lax',
-    },
+      secure: NODE_ENV === 'production', // true only in production
+  sameSite: NODE_ENV === 'production' ? 'none' : 'lax', // "none" for cross-site in prod
+},
+
   })
 );
 
