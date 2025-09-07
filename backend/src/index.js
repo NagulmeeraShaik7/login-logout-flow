@@ -58,11 +58,14 @@ app.use(
        maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
       httpOnly: true,
       secure: NODE_ENV === 'production', // true only in production
-  sameSite: NODE_ENV === 'production' ? 'none' : 'lax', // "none" for cross-site in prod
+  sameSite:"none"
 },
 
   })
 );
+
+app.set('trust proxy', 1);
+
 
 /**
  * Health check endpoint
