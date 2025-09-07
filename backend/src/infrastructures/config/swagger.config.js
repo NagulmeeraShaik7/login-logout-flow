@@ -23,7 +23,7 @@ const options = {
         description: 'Local dev server',
       },
       {
-        url: process.env.PRODUCTION_URL || 'https://login-logout-flow-backend.onrender.com',
+        url: process.env.PRODUCTION_URL || 'https://login-logout-flow-ji9s.onrender.com',
         description: 'Production server',
       }
     ],
