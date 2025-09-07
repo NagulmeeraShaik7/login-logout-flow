@@ -22,6 +22,10 @@ const options = {
         url: process.env.API_URL || 'http://localhost:4000',
         description: 'Local dev server',
       },
+      {
+        url: process.env.PRODUCTION_URL || 'https://login-logout-flow-backend.onrender.com',
+        description: 'Production server',
+      }
     ],
     components: {
       securitySchemes: {
