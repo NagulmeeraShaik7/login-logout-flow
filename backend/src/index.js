@@ -19,19 +19,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /**
- * CORS setup (open for all origins)
+ * Trust proxy (⚡ must be before session!)
  */
+app.set('trust proxy', 1);
+
+/**
+ * CORS setup (allow localhost + vercel frontend)
+ */
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://login-logout-flow-t8k2.vercel.app',
+];
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',                      // local dev
-     'https://login-logout-flow-t8k2.vercel.app'  // production frontend
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
-
-
 
 /**
  * Session store configuration
@@ -55,17 +65,13 @@ app.use(
       db: SESSION_DB_FILE.replace(/^\.\/+/, ''),
     }),
     cookie: {
-       maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
+      maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
       httpOnly: true,
-      secure: NODE_ENV === 'production', // true only in production
-  sameSite:"none"
-},
-
+      secure: NODE_ENV === 'production', // required on HTTPS
+      sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
+    },
   })
 );
-
-app.set('trust proxy', 1);
-
 
 /**
  * Health check endpoint
