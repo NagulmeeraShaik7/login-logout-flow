@@ -19,31 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /**
- * CORS setup
- *
- * Allows cross-origin requests from the configured frontend.
- * Ensures session cookies (`credentials`) can be exchanged.
+ * CORS setup (open for all origins)
  */
-const {
-  CLIENT_URL = 'https://login-logout-flow-t8k2.vercel.app/',
-} = process.env;
-
-app.use(
-  cors({
-    origin: CLIENT_URL,
-    credentials: true,
-  })
-);
+app.use(cors());
 
 /**
  * Session store configuration
- *
- * Uses SQLite to persist sessions across server restarts.
- * Environment variables allow customization of:
- * - SESSION_SECRET (encryption secret)
- * - SESSION_NAME (cookie name)
- * - SESSION_COOKIE_MAX_AGE_MS (cookie lifetime)
- * - SESSION_DB_FILE (SQLite session DB filename)
  */
 const SQLiteStore = SQLiteStoreFactory(session);
 const {
@@ -74,9 +55,6 @@ app.use(
 
 /**
  * Health check endpoint
- *
- * @route GET /health
- * @returns {object} JSON response with service status
  */
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'auth-backend' });
@@ -84,40 +62,25 @@ app.get('/health', (_req, res) => {
 
 /**
  * Application routes
- *
- * @route /api/auth
- * Includes:
- * - POST /register
- * - POST /login
- * - GET /me
- * - POST /logout
  */
 app.use('/api/auth', authRouter);
 
 /**
  * Swagger API docs
- *
- * @route /docs
- * Interactive Swagger UI powered by swagger-jsdoc
  */
 setupSwagger(app);
 
 /**
- * Global error handler (last middleware)
- *
- * Catches and formats errors into JSON responses.
+ * Global error handler
  */
 app.use(errorHandler);
 
 /**
  * Server startup
- *
- * Initializes SQLite schema, then starts Express server
- * on the configured port (default: 4000).
  */
 const PORT = Number(process.env.PORT || 4000);
 
-await initDb(); // Ensure DB schema is created before listening
+await initDb();
 console.log('Database initialized');
 
 app.listen(PORT, () => {
