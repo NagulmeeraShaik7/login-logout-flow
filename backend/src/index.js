@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
  * Ensures session cookies (`credentials`) can be exchanged.
  */
 const {
-  CLIENT_URL = 'http://localhost:3000',
+  CLIENT_URL = 'https://login-logout-flow-t8k2.vercel.app/',
 } = process.env;
 
 app.use(
