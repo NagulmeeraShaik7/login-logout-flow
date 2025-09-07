@@ -21,7 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 /**
  * CORS setup (open for all origins)
  */
-app.use(cors());
+app.use(
+  cors({
+    origin: true,           // allow requests from any origin dynamically
+    credentials: true       // allow cookies to be sent
+  })
+);
+
 
 /**
  * Session store configuration
