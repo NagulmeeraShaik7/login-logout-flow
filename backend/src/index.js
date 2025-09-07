@@ -68,7 +68,7 @@ app.use(
       maxAge: Number(SESSION_COOKIE_MAX_AGE_MS),
       httpOnly: true,
       secure: NODE_ENV === 'production', // required on HTTPS
-      sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: NODE_ENV === 'production' ? "None" : "Lax", // 'None' for cross-site cookies in production
     },
   })
 );
